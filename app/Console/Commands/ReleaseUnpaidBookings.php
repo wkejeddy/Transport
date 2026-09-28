@@ -74,18 +74,8 @@ class ReleaseUnpaidBookings extends Command
         $remindersCount = $dueReminders->count();
 
         foreach ($dueReminders as $booking) {
-            // Send SMS & WhatsApp notifications
-            \App\Services\NotificationService::sendPreDeparturePaymentReminder($booking);
-
-            // Record in-app TripAlert for passenger dashboard
-            \App\Models\TripAlert::create([
-                'trip_id' => $booking->trip_id,
-                'user_id' => $booking->passenger_id,
-                'type' => 'info',
-                'title' => 'Rappel Paiement Réservation (Reste 2h)',
-                'message' => "Votre voyage N° {$booking->trip->trip_number} part dans 8h. Il vous reste 2h pour régler votre billet avant libération automatique de vos places à 6h du départ.",
-                'is_read' => false,
-            ]);
+            // Dispatch queued reminder event pipeline (SMS, WhatsApp, TripAlert)
+            event(new \App\Events\TripReminderEvent($booking));
 
             $booking->update([
                 'reminder_sent_at' => $now,
@@ -119,18 +109,8 @@ class ReleaseUnpaidBookings extends Command
                 ]);
             });
 
-            // Send cancellation notification
-            \App\Services\NotificationService::sendReservationCancellationAlert($booking);
-
-            // Record in-app TripAlert
-            \App\Models\TripAlert::create([
-                'trip_id' => $booking->trip_id,
-                'user_id' => $booking->passenger_id,
-                'type' => 'cancellation',
-                'title' => 'Réservation Annulée - Délai Dépassé',
-                'message' => "Votre réservation pour le trajet {$booking->trip->departure_city} -> {$booking->trip->arrival_city} a été annulée car le paiement n'a pas été complété 6h avant le départ. Vos sièges ont été libérés.",
-                'is_read' => false,
-            ]);
+            // Dispatch queued cancellation alert event pipeline
+            event(new \App\Events\AdvanceReservationExpiringEvent($booking));
         }
 
         $this->info("Processed: {$releasedPendingCount} 2-min expired, {$remindersCount} 8h reminders, {$cancelledReservationsCount} 6h cancelled reservations.");

@@ -106,73 +106,79 @@
                 <i class="fa-solid fa-scale-balanced text-primary"></i> 3. {{ __('Caractéristiques du Colis & Valeur Déclarée') }}
             </h4>
 
-            <div class="grid grid-cols-2" style="gap: 16px;">
-                <div class="form-group">
-                    <label class="form-label" for="item_category" style="font-weight: 700;">{{ __('Catégorie de Marchandise *') }}</label>
-                    <select id="item_category" name="item_category" class="form-control" required style="border-radius: 8px;">
-                        <option value="electronics">{{ __('Appareils Électroniques & Informatiques') }}</option>
-                        <option value="general">{{ __('Marchandises Générales / Effets personnels') }}</option>
-                        <option value="clothing">{{ __('Vêtements & Textiles') }}</option>
-                        <option value="documents">{{ __('Plis & Documents Officiels') }}</option>
-                        <option value="perishables">{{ __('Vivres & Produits Agroalimentaires non périssables') }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="weight_kg" style="font-weight: 700;">{{ __('Poids approximatif (en Kg) *') }}</label>
-                    <input type="number" step="0.5" min="0.5" max="500" id="weight_kg" name="weight_kg" class="form-control" value="{{ old('weight_kg', '5.0') }}" required style="border-radius: 8px;">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="item_description" style="font-weight: 700;">{{ __('Description sommaire du contenu *') }}</label>
-                <textarea id="item_description" name="item_description" class="form-control" rows="2" placeholder="{{ __('Ex: Carton contenant 1 unité centrale, 1 écran et câblages') }}" required style="border-radius: 8px;">{{ old('item_description') }}</textarea>
-            </div>
-
-            <!-- Declared Value Input (Strict 10% Fee Basis) -->
-            <div style="background: var(--bg-surface); border: 1.5px solid var(--border-color); border-radius: 10px; padding: 20px; margin-bottom: 24px;">
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <label class="form-label" for="declared_value" style="font-weight: 800; color: var(--text-heading); font-size: 0.95rem; margin: 0;">
-                            {{ __('Valeur Déclarée Réelle du Colis (en FCFA) *') }}
-                        </label>
-                        <span class="badge" style="background: var(--primary); color: white; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
-                            {{ __('Tarification : Strictement 10%') }}
-                        </span>
+                <div class="grid grid-cols-2" style="gap: 16px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="item_category" style="font-weight: 700;">{{ __('Catégorie de Marchandise *') }}</label>
+                        <select id="item_category" name="item_category" class="form-control" required style="border-radius: 8px;">
+                            <option value="electronics">{{ __('Appareils Électroniques & Informatiques') }}</option>
+                            <option value="general">{{ __('Marchandises Générales / Effets personnels') }}</option>
+                            <option value="clothing">{{ __('Vêtements & Textiles') }}</option>
+                            <option value="documents">{{ __('Plis & Documents Officiels') }}</option>
+                            <option value="perishables">{{ __('Vivres & Produits Agroalimentaires non périssables') }}</option>
+                        </select>
                     </div>
-                    <input type="number" min="1000" step="1000" id="declared_value" name="declared_value" class="form-control" value="{{ old('declared_value', '50000') }}" required oninput="calculateFreightFee()" style="border-radius: 8px; font-size: 1.1rem; font-weight: 700;">
-                    <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
-                        {{ __("Le tarif d'acheminement est calculé automatiquement à hauteur exacte de 10% de la valeur déclarée.") }}
-                    </small>
-                </div>
 
-                <!-- Mandatory Liability & Reimbursement Disclosure -->
-                <div style="background: var(--primary-50); border: 1px solid var(--primary-100); border-left: 4px solid var(--primary); border-radius: 6px; padding: 12px 14px; margin-top: 14px; font-size: 0.83rem; color: var(--primary-text); line-height: 1.45;">
-                    <div style="font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                        <i class="fa-solid fa-circle-info"></i> {{ __('Engagement de Responsabilité Real Voyage :') }}
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="weight_kg" style="font-weight: 700;">{{ __('Poids approximatif (en Kg) *') }}</label>
+                        <div class="input-affix-wrapper">
+                            <input type="number" step="0.5" min="0.5" max="500" id="weight_kg" name="weight_kg" class="form-control" value="{{ old('weight_kg', '5.0') }}" required style="border-radius: 8px; font-weight: 700;">
+                            <span class="input-affix-tag">kg</span>
+                        </div>
                     </div>
-                    {{ $liabilityNotice ?? __("En cas de perte ou d'avarie constatée, la responsabilité et le remboursement de Real Voyage sont strictement fixés entre 2x et 5x la valeur déclarée du colis (selon conclusions du constat d'expertise contradictoire en gare).") }}
                 </div>
-            </div>
 
-            <!-- Transparent Real-time Calculation Summary -->
-            <div style="background: var(--primary-gradient); color: white; border-radius: 12px; padding: 22px; margin-bottom: 24px; box-shadow: var(--shadow-lg);">
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: rgba(255, 255, 255, 0.8);">
-                    <span>{{ __('Valeur Déclarée Prise en Charge :') }}</span>
-                    <strong id="previewDeclaredValue" style="color: #FFFFFF;">50 000 FCFA</strong>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label class="form-label" for="item_description" style="font-weight: 700;">{{ __('Description sommaire du contenu *') }}</label>
+                    <textarea id="item_description" name="item_description" class="form-control" rows="2" placeholder="{{ __('Ex: Carton contenant 1 unité centrale, 1 écran et câblages') }}" required style="border-radius: 8px;">{{ old('item_description') }}</textarea>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 12px; color: rgba(255, 255, 255, 0.8);">
-                    <span>{{ __('Frais de Transport Fret (Taux fixe 10%) :') }}</span>
-                    <strong id="previewRatePercent" style="color: var(--primary-text);">10%</strong>
+
+                <!-- Declared Value Input (Strict 10% Fee Basis) -->
+                <div style="background: var(--bg-surface); border: 1.5px solid var(--border-color); border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label class="form-label" for="declared_value" style="font-weight: 800; color: var(--text-heading); font-size: 0.95rem; margin: 0;">
+                                {{ __('Valeur Déclarée Réelle du Colis (en FCFA) *') }}
+                            </label>
+                            <span class="badge" style="background: var(--primary); color: white; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+                                {{ __('Tarification : Strictement 10%') }}
+                            </span>
+                        </div>
+                        <div class="input-affix-wrapper">
+                            <input type="number" min="1000" step="1000" id="declared_value" name="declared_value" class="form-control" value="{{ old('declared_value', '50000') }}" required oninput="calculateFreightFee()" style="border-radius: 8px; font-size: 1.1rem; font-weight: 700;">
+                            <span class="input-affix-tag">FCFA</span>
+                        </div>
+                        <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
+                            {{ __("Le tarif d'acheminement est calculé automatiquement à hauteur exacte de 10% de la valeur déclarée.") }}
+                        </small>
+                    </div>
+
+                    <!-- Mandatory Liability & Reimbursement Disclosure -->
+                    <div style="background: var(--primary-50); border: 1px solid var(--primary-100); border-left: 4px solid var(--primary); border-radius: 6px; padding: 12px 14px; margin-top: 14px; font-size: 0.83rem; color: var(--primary-text); line-height: 1.45;">
+                        <div style="font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-circle-info"></i> {{ __('Engagement de Responsabilité Real Express Voyages :') }}
+                        </div>
+                        {{ $liabilityNotice ?? __("En cas de perte ou d'avarie constatée, la responsabilité et le remboursement de Real Express Voyages sont strictement fixés entre 2x et 5x la valeur déclarée du colis (selon conclusions du constat d'expertise contradictoire en gare).") }}
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 12px; align-items: center;">
-                    <span>{{ __('Total Frais de Fret à Régler :') }}</span>
-                    <span id="previewTotalFee" style="color: var(--success-text); font-size: 1.6rem;">5 000 FCFA</span>
+
+                <!-- Transparent Real-time Calculation Summary -->
+                <div style="background: #0F172A; color: white; border-radius: 12px; padding: 22px; margin-bottom: 24px; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; color: #94A3B8;">
+                        <span>{{ __('Valeur Déclarée Prise en Charge :') }}</span>
+                        <strong id="previewDeclaredValue" style="color: #FFFFFF; font-variant-numeric: tabular-nums;">50 000 FCFA</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 12px; color: #94A3B8;">
+                        <span>{{ __('Frais de Transport Fret (Taux fixe 10%) :') }}</span>
+                        <strong id="previewRatePercent" style="color: #60A5FA; font-variant-numeric: tabular-nums;">10%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 900; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 12px; align-items: center;">
+                        <span>{{ __('Total Frais de Fret à Régler :') }}</span>
+                        <span id="previewTotalFee" style="color: #34D399; font-size: 1.6rem; font-variant-numeric: tabular-nums;">5 000 FCFA</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: #94A3B8; margin-top: 8px; text-align: right;">
+                        <i class="fa-solid fa-wallet"></i> {{ __('Paiement accepté par E-Wallet Real Express Voyages, MTN MoMo ou Orange Money') }}
+                    </div>
                 </div>
-                <div style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.75); margin-top: 8px; text-align: right;">
-                    <i class="fa-solid fa-wallet"></i> {{ __('Paiement accepté par E-Wallet Real Voyage, MTN MoMo ou Orange Money') }}
-                </div>
-            </div>
 
             <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; font-weight: 800; height: 50px; border-radius: 8px;">
                 <i class="fa-solid fa-lock"></i> {{ __('Enregistrer et Procéder au Règlement (10%)') }}

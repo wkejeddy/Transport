@@ -86,6 +86,8 @@ Route::middleware(['role:passager,admin'])->prefix('passenger')->name('passenger
     Route::get('/bookings/{booking}/checkout', [PassengerBookingController::class, 'checkout'])->name('bookings.checkout');
     Route::get('/bookings/{booking}/ticket', [PassengerBookingController::class, 'ticket'])->name('bookings.ticket');
     Route::get('/bookings/{booking}/pdf', [PassengerBookingController::class, 'pdf'])->name('bookings.pdf');
+    Route::get('/bookings/{booking}/thermal', [PassengerBookingController::class, 'thermal'])->name('bookings.thermal');
+    Route::post('/bookings/{booking}/reschedule', [PassengerBookingController::class, 'reschedule'])->name('bookings.reschedule');
     Route::post('/bookings/{booking}/cancel', [PassengerBookingController::class, 'cancel'])->name('bookings.cancel');
 
     // Payments & Mobile Money Checkout

@@ -11,9 +11,9 @@
                 <div class="form-group" style="margin-bottom: 0;">
                     <label class="form-label" style="font-size: 0.8rem;"><i class="fa-solid fa-clock"></i> {{ __('Horaire de Départ') }}</label>
                     <select name="departure_time" class="form-control">
-                        <option value="">{{ __('Tous les départs (10h00 / 21h30)') }}</option>
+                        <option value="">{{ __('Tous les départs (10h00 / 21h00)') }}</option>
                         <option value="10:00:00" {{ request('departure_time') === '10:00:00' ? 'selected' : '' }}>{{ __('Départ Matin (10h00)') }}</option>
-                        <option value="21:30:00" {{ request('departure_time') === '21:30:00' ? 'selected' : '' }}>{{ __('Départ Soirée (21h30)') }}</option>
+                        <option value="21:00:00" {{ request('departure_time') === '21:00:00' ? 'selected' : '' }}>{{ __('Départ Soirée (21h00)') }}</option>
                     </select>
                 </div>
 

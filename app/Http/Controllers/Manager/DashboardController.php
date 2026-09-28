@@ -79,6 +79,22 @@ class DashboardController extends Controller
         $seatsSold = max(0, $totalCapacity - $seatsRemaining);
         $occupancyRate = $totalCapacity > 0 ? round(($seatsSold / $totalCapacity) * 100, 1) : 0;
 
+        // Route Occupancy & Analytics for this Branch
+        $routeMetrics = (clone $tripsQuery)->select('departure_city', 'arrival_city')
+            ->selectRaw('COUNT(*) as trips_count')
+            ->selectRaw('SUM(seats_available) as seats_left')
+            ->groupBy('departure_city', 'arrival_city')
+            ->get()
+            ->map(function ($r) {
+                $cap = $r->trips_count * 75;
+                $sold = max(0, $cap - (int)$r->seats_left);
+                return [
+                    'label' => "{$r->departure_city} ➔ {$r->arrival_city}",
+                    'occupancy' => $cap > 0 ? min(100, round(($sold / $cap) * 100, 1)) : 0,
+                    'trips' => $r->trips_count,
+                ];
+            });
+
         $openDisputesQuery = Dispute::where('status', 'open');
         if ($branchId) {
             $openDisputesQuery->where('branch_id', $branchId);
@@ -108,6 +124,7 @@ class DashboardController extends Controller
             'cargoRevenue',
             'totalRevenue',
             'occupancyRate',
+            'routeMetrics',
             'openDisputes',
             'upcomingTrips',
             'recentShipments'

@@ -70,7 +70,7 @@ class ProfileTest extends TestCase
 
         $user = User::factory()->create();
 
-        $file = UploadedFile::fake()->image('avatar.jpg', 300, 300);
+        $file = UploadedFile::fake()->create('avatar.jpg', 100, 'image/jpeg');
 
         $response = $this->actingAs($user)->put(route('profile.update'), [
             'name' => $user->name,

@@ -47,11 +47,11 @@ class CheckinController extends Controller
         }
 
         if ($booking->status === 'checked_in') {
-            return back()->with('info', 'Passager déjà enregistré pour ce voyage.');
+            return back()->with('info', __('messages.flash.passenger_already_checked_in') ?: 'Passager déjà enregistré pour ce voyage.');
         }
 
         if ($booking->status !== 'confirmed') {
-            return back()->with('error', 'Impossible de valider l\'embarquement : la réservation n\'est pas confirmée (Statut: ' . $booking->status . ').');
+            return back()->with('error', __('messages.flash.checkin_not_confirmed', ['status' => $booking->status]) ?: ('Impossible de valider l\'embarquement : la réservation n\'est pas confirmée (Statut: ' . $booking->status . ').'));
         }
 
         $booking->update([
@@ -60,6 +60,6 @@ class CheckinController extends Controller
             'checked_in_by' => Auth::id(),
         ]);
 
-        return back()->with('success', 'Embarquement validé avec succès pour ' . ($booking->passenger->name ?? 'le passager') . ' !');
+        return back()->with('success', __('messages.flash.checkin_success', ['name' => $booking->passenger->name ?? 'le passager']) ?: ('Embarquement validé avec succès pour ' . ($booking->passenger->name ?? 'le passager') . ' !'));
     }
 }

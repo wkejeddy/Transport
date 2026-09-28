@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <!-- Extended curved path for perfectly centered, unclipped text -->
+    <path id="textArc" d="M 40,435 Q 300,625 560,435" fill="none" />
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- Main Circular Badge -->
+  <g id="main-circle">
+    <!-- Solid Royal Blue Disc -->
+    <circle cx="300" cy="225" r="195" fill="#0028fc" />
+
+    <!-- Perspective Road Flanking Borders (White) -->
+    <polygon points="295,35 305,35 395,415 372,415" fill="#ffffff" />
+    <polygon points="295,35 305,35 228,415 205,415" fill="#ffffff" />
+
+    <!-- Central Highway Road Surface (White) -->
+    <polygon points="297,40 303,40 368,415 232,415" fill="#ffffff" />
+
+    <!-- Dashed Centerline Dividers (Perspective scaled from horizon to foreground) -->
+    <rect x="298.5" y="48" width="3" height="6" fill="#000000" rx="0.5" />
+    <rect x="298" y="60" width="4" height="9" fill="#000000" rx="0.5" />
+    <rect x="297.5" y="76" width="5" height="12" fill="#000000" rx="0.5" />
+    <rect x="297" y="96" width="6" height="15" fill="#000000" rx="1" />
+    <rect x="296.5" y="120" width="7" height="18" fill="#000000" rx="1" />
+    <rect x="296" y="148" width="8" height="22" fill="#000000" rx="1" />
+    <rect x="295.5" y="180" width="9" height="26" fill="#000000" rx="1" />
+    <rect x="295" y="218" width="10" height="30" fill="#000000" rx="1.5" />
+    <rect x="294.5" y="260" width="11" height="34" fill="#000000" rx="1.5" />
+    <rect x="294" y="306" width="12" height="38" fill="#000000" rx="1.5" />
+    <rect x="293.5" y="356" width="13" height="44" fill="#000000" rx="2" />
+    <rect x="293" y="410" width="14" height="48" fill="#000000" rx="2" />
+  </g>
+
+  <!-- Banner Ribbon (Curved Bottom with Swallowtail Ends) -->
+  <g id="ribbon" filter="url(#subtleShadow)">
+    <!-- Left Ribbon Swallowtail Fold -->
+    <path d="M 115,415 L 25,385 L 70,440 L 25,495 L 110,475 Z" fill="#ffffff" stroke="#0028fc" stroke-width="5" stroke-linejoin="round" />
+    <polygon points="110,435 115,415 110,475" fill="#0018a8" />
+
+    <!-- Right Ribbon Swallowtail Fold -->
+    <path d="M 485,415 L 575,385 L 530,440 L 575,495 L 490,475 Z" fill="#ffffff" stroke="#0028fc" stroke-width="5" stroke-linejoin="round" />
+    <polygon points="490,435 485,415 490,475" fill="#0018a8" />
+
+    <!-- Main Front Arched Ribbon Body -->
+    <path d="M 75,405 Q 300,530 525,405 L 535,485 Q 300,610 65,485 Z" fill="#ffffff" stroke="#0028fc" stroke-width="7" stroke-linejoin="round" />
+
+    <!-- Ribbon Arc Text: REAL EXPRESS VOYAGES -->
+    <text font-family="'Impact', 'Arial Black', -apple-system, sans-serif" font-weight="900" font-size="30" fill="#0028fc" letter-spacing="2">
+      <textPath href="#textArc" xlink:href="#textArc" startOffset="50%" text-anchor="middle">REAL EXPRESS VOYAGES</textPath>
+    </text>
+  </g>
+</svg>

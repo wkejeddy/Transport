@@ -38,10 +38,9 @@ class SetLocale
             }
         }
 
-        // 3. Fallback to browser preferred language
+        // 3. Fallback to application default locale
         if (!$locale) {
-            $preferred = $request->getPreferredLanguage($this->supportedLocales);
-            $locale = in_array($preferred, $this->supportedLocales, true) ? $preferred : config('app.locale', 'fr');
+            $locale = config('app.locale', 'fr');
         }
 
         // 4. Strict safety fallback

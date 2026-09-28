@@ -7,7 +7,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'app_name' => 'Real Voyage Transport S.A.',
+    'app_name' => 'Real Express Voyages',
     'tagline' => 'Plateforme Nationale de Gestion des Transports et du Fret Multimodal',
 
     // Navigation & Common
@@ -30,9 +30,12 @@ return [
     // Trips & Booking
     'trips' => [
         'search_title' => 'Rechercher un Voyage',
+        'one_way' => 'Aller Simple',
+        'round_trip' => 'Aller-Retour (5% de remise)',
         'departure' => 'Départ',
         'arrival' => 'Arrivée',
         'date' => 'Date de Voyage',
+        'return_date' => 'Date de Retour',
         'search_btn' => 'Trouver un Autocar',
         'select_seats' => 'Choisir Sièges & Réserver',
         'choose_bus' => 'Choisir ce Bus',
@@ -45,11 +48,12 @@ return [
         'hold_guarantee' => 'Garantie Réservation Instantanée : Vos sièges sont bloqués pendant 2 minutes.',
         'immediate_payment' => 'Paiement Intégral Immédiat',
         'advance_reservation' => 'Pré-Réserver la Place (Frais : 500 FCFA)',
+        'round_trip_discount_applied' => 'Remise Aller-Retour de 5% appliquée !',
     ],
 
     // Seat Map
     'seatmap' => [
-        'title' => 'Plan Cabine 3D &bull; Autocar Grand Tourisme',
+        'title' => 'Plan Cabine 3D • Autocar Grand Tourisme',
         'subtitle' => 'Sélectionnez vos sièges passagers. Sièges 01 & 16 strictement réservés à l\'équipage Real Voyage.',
         'view_3d' => 'Perspective 3D',
         'view_2d' => 'Vue Dessus (2D)',
@@ -59,16 +63,14 @@ return [
         'crew' => 'Personnel de bord (01 & 16)',
         'driver' => 'Chauffeur',
         'convoyeur' => 'Convoyeur',
-        'cockpit' => 'POSTE DE CONDUITE • AVANT',
-        'rear' => 'FOND DU VÉHICULE • ISSUES DE SECOURS ARRIÈRE',
-        'seal' => 'Véhicule agréé Real Voyage S.A.',
     ],
 
-    // Payment & Wallet
-    'payment' => [
-        'title' => 'Règlement Billet Real Voyage',
-        'method' => 'Sélectionnez le mode de règlement',
-        'wallet' => 'E-Wallet Real Voyage',
+    // Checkout & Payment
+    'checkout' => [
+        'title' => 'Paiement & Confirmation du Billet',
+        'total' => 'Montant Total',
+        'reservation_fee' => 'Frais de Réservation (500 FCFA)',
+        'pay_with_wallet' => 'Payer avec mon E-Wallet',
         'wallet_balance' => 'Solde E-Wallet disponible',
         'orange_money' => 'Orange Money Cameroun',
         'mtn_momo' => 'MTN Mobile Money',
@@ -141,11 +143,16 @@ return [
         'not_enough_seats_class' => 'Désolé, il ne reste plus assez de places dans cette classe.',
         'not_enough_seats_trip' => 'Désolé, il ne reste plus assez de places disponibles sur ce voyage.',
         'seat_reserved_crew' => 'Le siège :seat est strictement réservé au personnel de bord (:label) et ne peut être réservé.',
+        'seat_staff_locked' => 'Le siège :seat est strictement réservé au personnel de bord (:label) et ne peut être réservé.',
         'seat_already_booked' => 'Le siège :seat a déjà été réservé par un autre passager. Veuillez en sélectionner un autre.',
         'not_enough_seats_coach' => 'Désolé, il ne reste plus assez de sièges passagers disponibles sur cet autocar.',
         'booking_already_cancelled' => 'Cette réservation est déjà annulée.',
         'trip_not_found' => 'Voyage associé introuvable.',
         'cancellation_denied_time' => 'Annulation refusée : Conformément aux conditions d\'exploitation de Real Voyage, l\'annulation d\'un billet n\'est autorisée qu\'à plus de 6 heures avant le départ (Temps restant : :hours h).',
+        'reschedule_success' => 'Votre voyage a été reporté avec succès ! Nouveau billet généré.',
+        'reschedule_denied_time' => 'Le report de voyage n\'est possible qu\'à plus de 12 heures avant le départ.',
+        'reschedule_insufficient_wallet' => 'Solde E-Wallet insuffisant pour régler le supplément de :amount FCFA.',
+        'reschedule_refunded' => 'Votre voyage a été reporté. La différence tarifaire de :amount FCFA a été créditée sur votre E-Wallet.',
     ],
 
     // Roles & Statuses

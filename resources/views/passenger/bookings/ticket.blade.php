@@ -9,7 +9,13 @@
         <a href="{{ route('passenger.bookings.history') }}" style="color: var(--text-muted); font-weight: 600; font-size: 0.9rem;">
             <i class="fa-solid fa-arrow-left"></i> {{ __('Mes réservations') }}
         </a>
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{{ \App\Services\NotificationService::getWhatsAppShareUrl($booking) }}" target="_blank" class="btn btn-outline" style="color: #25D366; border-color: #25D366; background: rgba(37, 211, 102, 0.05);">
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> {{ __('Partager WhatsApp') }}
+            </a>
+            <a href="{{ route('passenger.bookings.thermal', $booking) }}" class="btn btn-outline" target="_blank">
+                <i class="fa-solid fa-receipt" style="color: var(--primary);"></i> {{ __('Ticket Thermique 80mm') }}
+            </a>
             <a href="{{ route('passenger.bookings.pdf', $booking) }}" class="btn btn-outline" target="_blank">
                 <i class="fa-solid fa-file-pdf" style="color: var(--secondary);"></i> {{ __('Télécharger PDF') }}
             </a>
@@ -24,12 +30,10 @@
         <!-- Header Banner -->
         <div style="background: var(--primary); color: white; padding: 24px 30px; display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 14px;">
-                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
-                    <i class="fa-solid fa-bus"></i>
-                </div>
+                <img src="{{ asset('images/logo.svg') }}" onerror="this.onerror=null; this.src='{{ asset('images/logo.png') }}';" alt="Real Express Voyages" style="width: 52px; height: 52px; object-fit: contain; flex-shrink: 0;">
                 <div>
                     <div style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em;">
-                        Real Voyage S.A.
+                        Real Express Voyages
                     </div>
                     <div style="font-size: 0.8rem; color: #E2E8F0;">
                         {{ __('Titre de Transport Routier Homologué • Gare de') }} {{ $booking->trip->branch->name ?? 'Douala' }}

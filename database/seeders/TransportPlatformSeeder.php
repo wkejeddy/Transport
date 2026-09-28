@@ -398,10 +398,10 @@ class TransportPlatformSeeder extends Seeder
             ]
         );
 
-        // Trip 2: Yaoundé (Éleveur) -> Douala (Maképé) - Evening (21h30 tomorrow)
-        $departureDateNight = now()->addDay()->setTime(21, 30, 0);
+        // Trip 2: Yaoundé (Éleveur) -> Douala (Maképé) - Evening (21h00 tomorrow)
+        $departureDateNight = now()->addDay()->setTime(21, 0, 0);
         $trip2 = Trip::firstOrCreate(
-            ['trip_number' => 'RV-YAO-DLA-2130'],
+            ['trip_number' => 'RV-YAO-DLA-2100'],
             [
                 'branch_id' => $yaoundeBranch->id,
                 'vehicle_id' => $bus80_2->id,
@@ -468,10 +468,10 @@ class TransportPlatformSeeder extends Seeder
             ]
         );
 
-        // Trip 4: Dschang -> Yaoundé (Olembé) - Night (21h30 in 2 days)
-        $departureDateDschang = now()->addDays(2)->setTime(21, 30, 0);
+        // Trip 4: Dschang -> Yaoundé (Olembé) - Night (21h00 in 2 days)
+        $departureDateDschang = now()->addDays(2)->setTime(21, 0, 0);
         $trip4 = Trip::firstOrCreate(
-            ['trip_number' => 'RV-DSCH-YAO-2130'],
+            ['trip_number' => 'RV-DSCH-YAO-2100'],
             [
                 'branch_id' => $westBranch->id,
                 'vehicle_id' => $bus75_2->id,

@@ -120,11 +120,15 @@ class TripController extends Controller
 
     public function manifest(Trip $trip)
     {
-        $branch = Auth::user()->branch ?? Branch::first();
-        if ($branch && $trip->branch_id && $trip->branch_id !== $branch->id) {
-            abort(403);
+        $user = Auth::user();
+        if (!$user->isAdmin()) {
+            $branch = $user->branch;
+            if ($branch && $trip->branch_id && $trip->branch_id !== $branch->id) {
+                abort(403);
+            }
         }
 
+        $branch = $trip->branch ?? $user->branch ?? Branch::first();
         $trip->load(['vehicle', 'classes', 'bookings.passenger', 'shipments.sender']);
 
         return view('manager.trips.manifest', compact('trip', 'branch'));
@@ -132,9 +136,12 @@ class TripController extends Controller
 
     public function updateStatus(Request $request, Trip $trip)
     {
-        $branch = Auth::user()->branch ?? Branch::first();
-        if ($branch && $trip->branch_id && $trip->branch_id !== $branch->id) {
-            abort(403);
+        $user = Auth::user();
+        if (!$user->isAdmin()) {
+            $branch = $user->branch;
+            if ($branch && $trip->branch_id && $trip->branch_id !== $branch->id) {
+                abort(403);
+            }
         }
 
         $validated = $request->validate([

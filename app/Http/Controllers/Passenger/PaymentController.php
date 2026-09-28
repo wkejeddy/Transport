@@ -85,6 +85,7 @@ class PaymentController extends Controller
                     $booking->update([
                         'status' => 'confirmed',
                     ]);
+                    event(new \App\Events\BookingConfirmedEvent($booking));
                 }
             });
 

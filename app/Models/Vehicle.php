@@ -23,6 +23,15 @@ class Vehicle extends Model
         'status',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function ($vehicle) {
+            if (empty($vehicle->code)) {
+                $vehicle->code = 'BUS-' . strtoupper(uniqid());
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

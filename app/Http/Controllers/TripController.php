@@ -17,20 +17,22 @@ class TripController extends Controller
         $query = Trip::with(['branch', 'classes', 'vehicle', 'departureTerminal', 'arrivalTerminal'])
             ->whereIn('status', ['scheduled', 'delayed']);
 
-        if ($request->filled('from')) {
-            $query->where(function($q) use ($request) {
-                $q->where('departure_city', 'like', '%' . $request->from . '%')
-                  ->orWhereHas('departureTerminal', function($t) use ($request) {
-                      $t->where('name', 'like', '%' . $request->from . '%');
+        $from = $request->input('from') ?: $request->input('departure');
+        if (!empty($from)) {
+            $query->where(function($q) use ($from) {
+                $q->where('departure_city', 'like', '%' . $from . '%')
+                  ->orWhereHas('departureTerminal', function($t) use ($from) {
+                      $t->where('name', 'like', '%' . $from . '%');
                   });
             });
         }
 
-        if ($request->filled('to')) {
-            $query->where(function($q) use ($request) {
-                $q->where('arrival_city', 'like', '%' . $request->to . '%')
-                  ->orWhereHas('arrivalTerminal', function($t) use ($request) {
-                      $t->where('name', 'like', '%' . $request->to . '%');
+        $to = $request->input('to') ?: $request->input('arrival');
+        if (!empty($to)) {
+            $query->where(function($q) use ($to) {
+                $q->where('arrival_city', 'like', '%' . $to . '%')
+                  ->orWhereHas('arrivalTerminal', function($t) use ($to) {
+                      $t->where('name', 'like', '%' . $to . '%');
                   });
             });
         }

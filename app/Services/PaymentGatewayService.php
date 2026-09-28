@@ -233,8 +233,8 @@ class PaymentGatewayService
                         $payable->update([
                             'status' => 'confirmed',
                         ]);
-                        // Dispatch simulated SMS & WhatsApp confirmation for e-ticket
-                        NotificationService::sendBookingConfirmation($payable);
+                        // Dispatch async event pipeline
+                        event(new \App\Events\BookingConfirmedEvent($payable));
                     }
                 } elseif ($payable instanceof Shipment) {
                     $payable->update([

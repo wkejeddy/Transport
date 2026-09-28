@@ -117,9 +117,9 @@ class NewBusesAndPassengersSeeder extends Seeder
         $baseDate = now()->addDay();
 
         $tripsData = [
-            // Bus 1: 06h30 Matin (Express Matinal Douala -> Yaoundé)
+            // Bus 1: 10h00 Matin (VIP Tourismo Douala -> Yaoundé)
             [
-                'trip_number' => 'RV-DLA-YAO-0630',
+                'trip_number' => 'RV-DLA-YAO-1000',
                 'branch_id' => $doualaBranch->id,
                 'vehicle_id' => $createdBuses['RV-75-003']->id,
                 'departure_terminal_id' => $terminalMakepe->id,
@@ -129,8 +129,8 @@ class NewBusesAndPassengersSeeder extends Seeder
                 'departure_station' => $terminalMakepe->name,
                 'arrival_city' => 'Yaoundé',
                 'arrival_station' => $terminalOlembe->name,
-                'departure_time' => (clone $baseDate)->setTime(6, 30, 0),
-                'arrival_time_estimated' => (clone $baseDate)->setTime(10, 30, 0),
+                'departure_time' => (clone $baseDate)->setTime(10, 0, 0),
+                'arrival_time_estimated' => (clone $baseDate)->setTime(14, 0, 0),
                 'base_price' => 6000,
                 'seats_available' => 73, // 75 - 2 locked seats (Driver S-01 & Convoyeur S-16)
                 'cargo_available_kg' => 6000,
@@ -158,9 +158,9 @@ class NewBusesAndPassengersSeeder extends Seeder
                 ],
             ],
 
-            // Bus 2: 08h00 Matin (Direct Yaoundé -> Douala)
+            // Bus 2: 10h00 Matin (Direct Yaoundé -> Douala)
             [
-                'trip_number' => 'RV-YAO-DLA-0800',
+                'trip_number' => 'RV-YAO-DLA-1000',
                 'branch_id' => $yaoundeBranch->id,
                 'vehicle_id' => $createdBuses['RV-80-003']->id,
                 'departure_terminal_id' => $terminalEleveur->id,
@@ -170,8 +170,8 @@ class NewBusesAndPassengersSeeder extends Seeder
                 'departure_station' => $terminalEleveur->name,
                 'arrival_city' => 'Douala',
                 'arrival_station' => $terminalPK14->name,
-                'departure_time' => (clone $baseDate)->setTime(8, 0, 0),
-                'arrival_time_estimated' => (clone $baseDate)->setTime(12, 15, 0),
+                'departure_time' => (clone $baseDate)->setTime(10, 0, 0),
+                'arrival_time_estimated' => (clone $baseDate)->setTime(14, 15, 0),
                 'base_price' => 5500,
                 'seats_available' => 78,
                 'cargo_available_kg' => 7000,
@@ -197,9 +197,9 @@ class NewBusesAndPassengersSeeder extends Seeder
                 ],
             ],
 
-            // Bus 3: 13h00 Après-midi (Liaison Ouest-Littoral Bafoussam -> Douala)
+            // Bus 3: 10h00 Matin (Liaison Ouest-Littoral Bafoussam -> Douala)
             [
-                'trip_number' => 'RV-BAF-DLA-1300',
+                'trip_number' => 'RV-BAF-DLA-1000',
                 'branch_id' => $westBranch->id,
                 'vehicle_id' => $createdBuses['RV-75-004']->id,
                 'departure_terminal_id' => $terminalBafoussam->id,
@@ -209,8 +209,8 @@ class NewBusesAndPassengersSeeder extends Seeder
                 'departure_station' => $terminalBafoussam->name,
                 'arrival_city' => 'Douala',
                 'arrival_station' => $terminalBepanda->name,
-                'departure_time' => (clone $baseDate)->setTime(13, 0, 0),
-                'arrival_time_estimated' => (clone $baseDate)->setTime(17, 45, 0),
+                'departure_time' => (clone $baseDate)->setTime(10, 0, 0),
+                'arrival_time_estimated' => (clone $baseDate)->setTime(14, 45, 0),
                 'base_price' => 4500,
                 'seats_available' => 73,
                 'cargo_available_kg' => 5500,
@@ -235,9 +235,9 @@ class NewBusesAndPassengersSeeder extends Seeder
                 ],
             ],
 
-            // Bus 4: 15h30 Après-midi (Ligne Universitaire Douala -> Dschang)
+            // Bus 4: 21h00 Soir (Ligne Universitaire Douala -> Dschang)
             [
-                'trip_number' => 'RV-DLA-DSC-1530',
+                'trip_number' => 'RV-DLA-DSC-2100',
                 'branch_id' => $doualaBranch->id,
                 'vehicle_id' => $createdBuses['RV-80-004']->id,
                 'departure_terminal_id' => $terminalMakepe->id,
@@ -247,8 +247,8 @@ class NewBusesAndPassengersSeeder extends Seeder
                 'departure_station' => $terminalMakepe->name,
                 'arrival_city' => 'Dschang',
                 'arrival_station' => $terminalDschang->name,
-                'departure_time' => (clone $baseDate)->setTime(15, 30, 0),
-                'arrival_time_estimated' => (clone $baseDate)->setTime(20, 45, 0),
+                'departure_time' => (clone $baseDate)->setTime(21, 0, 0),
+                'arrival_time_estimated' => (clone $baseDate)->addDay()->setTime(2, 15, 0),
                 'base_price' => 5000,
                 'seats_available' => 78,
                 'cargo_available_kg' => 7500,
@@ -273,9 +273,9 @@ class NewBusesAndPassengersSeeder extends Seeder
                 ],
             ],
 
-            // Bus 5: 22h00 Nuit (Voyage de Nuit Yaoundé -> Bafoussam)
+            // Bus 5: 21h00 Nuit (Voyage de Nuit Yaoundé -> Bafoussam)
             [
-                'trip_number' => 'RV-YAO-BAF-2200',
+                'trip_number' => 'RV-YAO-BAF-2100',
                 'branch_id' => $yaoundeBranch->id,
                 'vehicle_id' => $createdBuses['RV-80-005']->id,
                 'departure_terminal_id' => $terminalBiyemAssi->id,
@@ -285,8 +285,8 @@ class NewBusesAndPassengersSeeder extends Seeder
                 'departure_station' => $terminalBiyemAssi->name,
                 'arrival_city' => 'Bafoussam',
                 'arrival_station' => $terminalBafoussam->name,
-                'departure_time' => (clone $baseDate)->setTime(22, 0, 0),
-                'arrival_time_estimated' => (clone $baseDate)->addDay()->setTime(3, 30, 0),
+                'departure_time' => (clone $baseDate)->setTime(21, 0, 0),
+                'arrival_time_estimated' => (clone $baseDate)->addDay()->setTime(2, 30, 0),
                 'base_price' => 5000,
                 'seats_available' => 78,
                 'cargo_available_kg' => 7500,

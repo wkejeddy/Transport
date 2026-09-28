@@ -16,13 +16,16 @@ class Booking extends Model
         'booking_reference',
         'passenger_id',
         'trip_id',
+        'return_trip_id',
         'trip_class_id',
         'transport_class',
         'booking_type',
+        'is_round_trip',
         'seats_count',
         'seat_numbers',
         'passengers_data',
         'total_amount',
+        'round_trip_discount',
         'reservation_fee',
         'reservation_fee_paid',
         'status',
@@ -38,7 +41,9 @@ class Booking extends Model
         return [
             'seat_numbers' => 'array',
             'passengers_data' => 'array',
+            'is_round_trip' => 'boolean',
             'total_amount' => 'decimal:2',
+            'round_trip_discount' => 'decimal:2',
             'reservation_fee' => 'decimal:2',
             'reservation_fee_paid' => 'boolean',
             'expires_at' => 'datetime',
@@ -55,6 +60,11 @@ class Booking extends Model
     public function trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class, 'trip_id');
+    }
+
+    public function returnTrip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class, 'return_trip_id');
     }
 
     public function tripClass(): BelongsTo

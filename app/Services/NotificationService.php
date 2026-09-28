@@ -10,7 +10,40 @@ use Illuminate\Support\Facades\Log;
 class NotificationService
 {
     /**
-     * Send simulated SMS & WhatsApp booking confirmation to passenger
+     * Build WhatsApp Web prefilled share link
+     */
+    public static function getWhatsAppShareUrl(Booking $booking, ?string $phone = null): string
+    {
+        $targetPhone = $phone ? preg_replace('/[^0-9]/', '', $phone) : '';
+        if ($targetPhone && !str_starts_with($targetPhone, '237') && strlen($targetPhone) === 9) {
+            $targetPhone = '237' . $targetPhone;
+        }
+
+        $passengerName = $booking->passengers_data[0]['name'] ?? $booking->passenger->name ?? 'Passager';
+        $seats = implode(', ', $booking->seat_numbers ?? []);
+        $depTime = $booking->trip ? $booking->trip->departure_time->format('d/m/Y à H:i') : '';
+        $route = $booking->trip ? "{$booking->trip->departure_city} ➔ {$booking->trip->arrival_city}" : '';
+        $station = $booking->trip ? $booking->trip->departure_station : 'Gare Real Voyage';
+
+        $text = "*REAL VOYAGE TRANSPORT S.A. - E-BILLET OFFICIEL*\n\n"
+              . "👤 *Passager* : {$passengerName}\n"
+              . "🎫 *Référence* : {$booking->booking_reference}\n"
+              . "🛣️ *Trajet* : {$route}\n"
+              . "⏰ *Départ* : {$depTime}\n"
+              . "🏢 *Gare d'embarquement* : {$station}\n"
+              . "💺 *Siège(s)* : {$seats}\n"
+              . "💵 *Montant* : " . number_format($booking->total_amount, 0, ',', ' ') . " FCFA\n\n"
+              . "ℹ️ _Présentez ce message et votre CNI au guichet d'embarquement 45 min avant le départ._";
+
+        $encodedText = rawurlencode($text);
+        if ($targetPhone) {
+            return "https://api.whatsapp.com/send?phone={$targetPhone}&text={$encodedText}";
+        }
+        return "https://api.whatsapp.com/send?text={$encodedText}";
+    }
+
+    /**
+     * Send simulated SMS & WhatsApp confirmation for paid confirmed booking
      */
     public static function sendBookingConfirmation(Booking $booking): array
     {
@@ -29,6 +62,7 @@ class NotificationService
             'phone' => $phone,
             'sms' => $smsContent,
             'whatsapp' => $whatsappContent,
+            'whatsapp_url' => self::getWhatsAppShareUrl($booking, $phone),
             'sent_at' => now()->toIso8601String(),
         ];
     }

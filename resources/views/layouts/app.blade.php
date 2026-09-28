@@ -52,43 +52,45 @@
     @yield('styles')
 </head>
 <body>
+    @if(!request()->routeIs('login', 'register*'))
     <!-- Top Navigation Bar (Minimalist: Name & Logo Only + Menu Bar Button) -->
     <header class="navbar">
         <div class="container navbar-inner">
             <!-- Brand Logo & Name -->
-            <a href="{{ route('home') }}" class="brand-logo">
-                <div class="brand-icon">
-                    <i class="fa-solid fa-route"></i>
-                </div>
+            <a href="{{ route('home') }}" class="brand-logo" style="gap: 12px;">
+                <img src="{{ asset('images/logo.svg') }}" onerror="this.onerror=null; this.src='{{ asset('images/logo.png') }}';" alt="Real Express Voyages" style="width: 42px; height: 42px; object-fit: contain; flex-shrink: 0;">
                 <div style="display: flex; flex-direction: column;">
-                    <span style="font-weight: 900; line-height: 1.1; font-size: 1.3rem;">{{ config('app.name', 'Travel') }}</span>
-                    <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">{{ __('Transport National') }}</span>
+                    <span style="font-weight: 900; line-height: 1.1; font-size: 1.25rem; letter-spacing: -0.02em;">{{ config('app.name', 'Real Express Voyages') }}</span>
+                    <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">{{ __('Transport Interurbain & Fret') }}</span>
                 </div>
             </a>
 
-            <!-- Desktop Navigation Links -->
+            <!-- Desktop Navigation Links (Clean Minimalist format) -->
             <nav class="desktop-nav" aria-label="{{ __('Navigation Principale') }}">
+                <a href="{{ route('home') }}" class="desktop-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
+                    {{ __('Accueil') }}
+                </a>
                 <a href="{{ route('trips.index') }}" class="desktop-nav-link {{ request()->routeIs('trips.*') ? 'active' : '' }}">
                     {{ __('Horaires & Départs') }}
-                </a>
-                <a href="{{ route('shipments.track') }}" class="desktop-nav-link {{ request()->routeIs('shipments.track') ? 'active' : '' }}">
-                    {{ __('Suivi de Colis') }}
                 </a>
                 <a href="{{ route('passenger.shipments.create') }}" class="desktop-nav-link {{ request()->routeIs('passenger.shipments.*') ? 'active' : '' }}">
                     {{ __('Fret Express') }}
                 </a>
+                <a href="{{ route('shipments.track') }}" class="desktop-nav-link {{ request()->routeIs('shipments.track') ? 'active' : '' }}">
+                    {{ __('Suivi de Colis') }}
+                </a>
             </nav>
 
-            <!-- Right Actions: Direct CTAs, Language Switcher, Theme Switcher & Menu Drawer Toggle -->
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <!-- Right Actions: Rounded Pill CTA (Book a Tour equivalent), Language & Theme -->
+            <div style="display: flex; align-items: center; gap: 10px;">
                 @auth
-                    <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : (Auth::user()->isManager() ? route('manager.dashboard') : route('passenger.dashboard')) }}" class="btn btn-sm btn-primary desktop-only" style="font-weight: 700;">
-                        <i class="fa-solid fa-gauge-high"></i> {{ __('Mon Espace') }}
+                    <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : (Auth::user()->isManager() ? route('manager.dashboard') : route('passenger.dashboard')) }}" class="haven-btn-pill-light desktop-only" style="font-weight: 700;">
+                        <i class="fa-solid fa-user-circle"></i> {{ __('Mon Espace') }}
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="btn-text desktop-only">{{ __('Connexion') }}</a>
-                    <a href="{{ route('trips.index') }}" class="btn btn-sm btn-primary desktop-only" style="font-weight: 700;">
-                        {{ __('Réserver') }}
+                    <a href="{{ route('login') }}" class="btn-text desktop-only" style="font-weight: 600;">{{ __('Connexion') }}</a>
+                    <a href="{{ route('trips.index') }}" class="haven-btn-pill-light desktop-only">
+                        {{ __('Réserver un Billet') }}
                     </a>
                 @endauth
 
@@ -119,11 +121,9 @@
     <aside class="menu-bar-drawer" id="menuBarDrawer" aria-label="{{ __('Menu Principal') }}">
         <!-- Header of Menu Bar -->
         <div class="menu-bar-header">
-            <a href="{{ route('home') }}" class="brand-logo" style="font-size: 1.15rem;">
-                <div class="brand-icon" style="width: 32px; height: 32px; font-size: 0.95rem;">
-                    <i class="fa-solid fa-route"></i>
-                </div>
-                <div>{{ config('app.name', 'Travel') }}</div>
+            <a href="{{ route('home') }}" class="brand-logo" style="font-size: 1.15rem; gap: 10px;">
+                <img src="{{ asset('images/logo.svg') }}" onerror="this.onerror=null; this.src='{{ asset('images/logo.png') }}';" alt="Real Express Voyages" style="width: 36px; height: 36px; object-fit: contain; flex-shrink: 0;">
+                <div>{{ config('app.name', 'Real Express Voyages') }}</div>
             </a>
 
             <button type="button" id="menuBarClose" class="menu-bar-close-btn" aria-label="{{ __('Fermer le Menu') }}" title="{{ __('Fermer') }}">
@@ -250,9 +250,11 @@
             </div>
         </div>
     </aside>
+    @endif
 
     <!-- Main Content Body -->
     <main>
+        @if(!request()->routeIs('login', 'register*'))
         <div class="container" style="padding-top: 16px;">
             @if(session('success'))
                 <div class="alert alert-success">
@@ -288,10 +290,12 @@
                 </div>
             @endif
         </div>
+        @endif
 
         @yield('content')
     </main>
 
+    @if(!request()->routeIs('login', 'register*'))
     <!-- Mobile Sticky Bottom Nav Bar -->
     <nav class="mobile-bottom-bar no-print">
         <div class="mobile-bottom-inner">
@@ -338,11 +342,9 @@
         <div class="container">
             <div class="grid grid-cols-4" style="gap: 40px; margin-bottom: 40px;">
                 <div>
-                    <div class="brand-logo" style="color: white; margin-bottom: 16px;">
-                        <div class="brand-icon">
-                            <i class="fa-solid fa-route"></i>
-                        </div>
-                        {{ config('app.name', 'Travel') }}
+                    <div class="brand-logo" style="color: white; margin-bottom: 16px; gap: 12px;">
+                        <img src="{{ asset('images/logo.svg') }}" onerror="this.onerror=null; this.src='{{ asset('images/logo.png') }}';" alt="Real Express Voyages" style="width: 44px; height: 44px; object-fit: contain; flex-shrink: 0;">
+                        <span>{{ config('app.name', 'Real Express Voyages') }}</span>
                     </div>
                     <p style="font-size: 0.88rem; color: #94A3B8; line-height: 1.6; margin-bottom: 16px;">
                         {{ __('Plateforme nationale unifiée de billetterie multimodale (Autocars & Trains Camrail) et transport de colis avec paiement Mobile Money au Cameroun.') }}
@@ -422,6 +424,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
     <!-- Theme Switcher & Mobile Drawer Scripts -->
     <script>

@@ -45,11 +45,11 @@ class NewBusesAndPassengersTest extends TestCase
     public function test_five_new_scheduled_trips_with_times(): void
     {
         $tripNumbers = [
-            'RV-DLA-YAO-0630' => ['Douala', 'Yaoundé', 6, 30],
-            'RV-YAO-DLA-0800' => ['Yaoundé', 'Douala', 8, 0],
-            'RV-BAF-DLA-1300' => ['Bafoussam', 'Douala', 13, 0],
-            'RV-DLA-DSC-1530' => ['Douala', 'Dschang', 15, 30],
-            'RV-YAO-BAF-2200' => ['Yaoundé', 'Bafoussam', 22, 0],
+            'RV-DLA-YAO-1000' => ['Douala', 'Yaoundé', 10, 0],
+            'RV-YAO-DLA-1000' => ['Yaoundé', 'Douala', 10, 0],
+            'RV-BAF-DLA-1000' => ['Bafoussam', 'Douala', 10, 0],
+            'RV-DLA-DSC-2100' => ['Douala', 'Dschang', 21, 0],
+            'RV-YAO-BAF-2100' => ['Yaoundé', 'Bafoussam', 21, 0],
         ];
 
         foreach ($tripNumbers as $num => [$from, $to, $hour, $min]) {
@@ -95,9 +95,9 @@ class NewBusesAndPassengersTest extends TestCase
     {
         $response = $this->get(route('trips.index'));
         $response->assertStatus(200);
-        $response->assertSee('RV-DLA-YAO-0630');
-        $response->assertSee('06:30');
-        $response->assertSee('RV-YAO-DLA-0800');
-        $response->assertSee('08:00');
+        $response->assertSee('RV-DLA-YAO-1000');
+        $response->assertSee('10:00');
+        $response->assertSee('RV-DLA-DSC-2100');
+        $response->assertSee('21:00');
     }
 }

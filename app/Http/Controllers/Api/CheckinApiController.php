@@ -26,7 +26,15 @@ class CheckinApiController extends Controller
         }
 
         if ($booking->status === 'checked_in') {
-            return response()->json(['status' => 'warning', 'message' => 'Passager déjà enregistré.', 'data' => $booking]);
+            return response()->json([
+                'status' => 'warning',
+                'message' => 'Passager déjà enregistré pour ce voyage.',
+                'data' => [
+                    'booking_reference' => $booking->booking_reference,
+                    'passenger' => $booking->passenger->name ?? 'Passager',
+                    'checked_in_at' => $booking->checked_in_at ? $booking->checked_in_at->toIso8601String() : null,
+                ]
+            ]);
         }
 
         if ($booking->status !== 'confirmed') {
@@ -43,6 +51,7 @@ class CheckinApiController extends Controller
             'message' => 'Embarquement validé avec succès !',
             'passenger' => $booking->passenger->name ?? 'Passager',
             'seats' => $booking->seat_numbers,
+            'checked_in_at' => now()->toIso8601String(),
         ]);
     }
 }
