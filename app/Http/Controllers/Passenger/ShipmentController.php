@@ -90,8 +90,9 @@ class ShipmentController extends Controller
 
     public function checkout(Shipment $shipment)
     {
-        if ($shipment->sender_id !== Auth::id()) {
-            abort(403);
+        if ($shipment->sender_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.shipments.index')
+                ->with('error', __('Accès non autorisé : cet envoi de colis appartient à un autre compte voyageur.'));
         }
 
         if ($shipment->payment && $shipment->payment->isSuccessful()) {
@@ -106,7 +107,8 @@ class ShipmentController extends Controller
     public function show(Shipment $shipment)
     {
         if ($shipment->sender_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
-            abort(403);
+            return redirect()->route('passenger.shipments.index')
+                ->with('error', __('Accès non autorisé : cet envoi de colis appartient à un autre compte voyageur.'));
         }
 
         $shipment->load(['branch', 'originTerminal', 'destinationTerminal', 'sender', 'payment']);

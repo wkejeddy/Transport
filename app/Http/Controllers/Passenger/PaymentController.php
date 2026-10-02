@@ -24,8 +24,9 @@ class PaymentController extends Controller
 
     public function processBookingPayment(Request $request, Booking $booking)
     {
-        if ($booking->passenger_id !== Auth::id()) {
-            abort(403);
+        if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : cette réservation appartient à un autre compte voyageur.'));
         }
 
         if ($booking->isExpired()) {
@@ -101,8 +102,9 @@ class PaymentController extends Controller
 
     public function processShipmentPayment(Request $request, Shipment $shipment)
     {
-        if ($shipment->sender_id !== Auth::id()) {
-            abort(403);
+        if ($shipment->sender_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.shipments.index')
+                ->with('error', __('Accès non autorisé : cet envoi de colis appartient à un autre utilisateur.'));
         }
 
         $validated = $request->validate([
@@ -160,8 +162,9 @@ class PaymentController extends Controller
 
     public function show(Payment $payment)
     {
-        if ($payment->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
-            abort(403);
+        if ($payment->user_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.dashboard')
+                ->with('error', __('Accès non autorisé à cette transaction.'));
         }
 
         $payment->load(['payable', 'user']);
@@ -171,8 +174,9 @@ class PaymentController extends Controller
 
     public function simulate(Request $request, Payment $payment)
     {
-        if ($payment->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
-            abort(403);
+        if ($payment->user_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.dashboard')
+                ->with('error', __('Accès non autorisé à cette transaction.'));
         }
 
         $action = $request->input('action', 'success');

@@ -21,7 +21,7 @@ class ReleaseUnpaidBookings extends Command
      *
      * @var string
      */
-    protected $description = 'Release unpaid 2-minute bookings, send 8h departure reminders, and auto-cancel uncompleted reservations 6h prior to departure';
+    protected $description = 'Release unpaid 30-minute bookings, send 8h departure reminders, and auto-cancel uncompleted reservations 6h prior to departure';
 
     /**
      * Execute the console command.
@@ -30,7 +30,7 @@ class ReleaseUnpaidBookings extends Command
     {
         $now = now();
 
-        // 1. Process standard 2-minute expired pending bookings
+        // 1. Process standard 30-minute expired pending bookings
         $expiredPending = Booking::where('status', 'pending')
             ->where('expires_at', '<=', $now)
             ->with(['trip', 'tripClass'])
@@ -113,8 +113,8 @@ class ReleaseUnpaidBookings extends Command
             event(new \App\Events\AdvanceReservationExpiringEvent($booking));
         }
 
-        $this->info("Processed: {$releasedPendingCount} 2-min expired, {$remindersCount} 8h reminders, {$cancelledReservationsCount} 6h cancelled reservations.");
-        Log::info("transport:release-unpaid-bookings processed: {$releasedPendingCount} pending expired, {$remindersCount} reminders sent, {$cancelledReservationsCount} 6h reservations cancelled.");
+        $this->info("Processed: {$releasedPendingCount} 30-min expired, {$remindersCount} 8h reminders, {$cancelledReservationsCount} 6h cancelled reservations.");
+        Log::info("transport:release-unpaid-bookings processed: {$releasedPendingCount} pending 30-min expired, {$remindersCount} reminders sent, {$cancelledReservationsCount} 6h reservations cancelled.");
 
         return Command::SUCCESS;
     }

@@ -100,6 +100,14 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.flash.logged_out'),
+                'redirect' => route('home')
+            ]);
+        }
+
         return redirect()->route('home')->with('info', __('messages.flash.logged_out'));
     }
 

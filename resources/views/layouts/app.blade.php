@@ -52,6 +52,9 @@
     @yield('styles')
 </head>
 <body>
+    <!-- Real Voyage Cinematic App Splash Screen -->
+    @include('components.splash-screen')
+
     @if(!request()->routeIs('login', 'register*'))
     <!-- Top Navigation Bar (Minimalist: Name & Logo Only + Menu Bar Button) -->
     <header class="navbar">
@@ -94,18 +97,6 @@
                     </a>
                 @endauth
 
-                <!-- Fast Language Switcher Pill -->
-                <a href="{{ route('lang.swap', app()->getLocale() === 'fr' ? 'en' : 'fr') }}" class="lang-switch-btn" title="{{ app()->getLocale() === 'fr' ? __('Switch to English') : __('Passer en Français') }}" aria-label="{{ __('Langue d\'affichage') }}">
-                    <i class="fa-solid fa-globe"></i>
-                    <span class="lang-current">{{ app()->getLocale() === 'fr' ? 'FR' : 'EN' }}</span>
-                    <span class="lang-divider">/</span>
-                    <span class="lang-target">{{ app()->getLocale() === 'fr' ? 'EN' : 'FR' }}</span>
-                </a>
-
-                <!-- Quick Theme Toggle Button -->
-                <button type="button" class="theme-quick-toggle" onclick="toggleTheme()" title="{{ __('Mode Sombre / Clair') }}" aria-label="{{ __('Mode Sombre / Clair') }}">
-                    <i class="fa-solid fa-moon" id="themeIconNav"></i>
-                </button>
 
                 <!-- Menu Bar Toggle Button -->
                 <button type="button" class="menu-bar-toggle" id="menuBarOpen" aria-label="{{ __('Ouvrir le Menu') }}" title="{{ __('Menu Principal') }}">
@@ -530,7 +521,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Register PWA Service Worker for Offline access
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').catch(function() {});
+                navigator.serviceWorker.register("{{ asset('sw.js') }}").catch(function() {});
             }
 
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';

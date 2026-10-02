@@ -22,13 +22,29 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
         ]);
         
-        // Exclude webhook callback routes from CSRF verification
+        // Exclude logout and webhook callback routes from CSRF verification
         $middleware->validateCsrfTokens(except: [
+            'logout',
             'api/payments/momo/callback',
             'api/payments/om/callback',
             'api/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, \Illuminate\Http\Request $request) {
+            if ($request->is('logout') || $request->routeIs('logout')) {
+                \Illuminate\Support\Facades\Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect()->route('home')->with('info', __('messages.flash.logged_out'));
+            }
+
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => 'CSRF token mismatch or session expired.',
+                ], 419);
+            }
+
+            return redirect()->route('login')->with('warning', __('Votre session a expiré en raison d\'inactivité. Veuillez vous reconnecter.'));
+        });
     })->create();

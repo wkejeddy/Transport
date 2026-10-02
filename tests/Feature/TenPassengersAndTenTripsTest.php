@@ -15,7 +15,8 @@ class TenPassengersAndTenTripsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed();
+        $this->seed(\Database\Seeders\TransportPlatformSeeder::class);
+        $this->seed(\Database\Seeders\TenPassengersAndTenTripsSeeder::class);
     }
 
     /**

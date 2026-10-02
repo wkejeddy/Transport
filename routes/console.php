@@ -8,7 +8,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Schedule 2-minute unpaid booking release & advance reservation 8h reminder / 6h cancellation every minute
+// Schedule 30-minute unpaid booking release & advance reservation 8h reminder / 6h cancellation every minute
 Schedule::command('transport:release-unpaid-bookings')->everyMinute();
 
 // Schedule dispute 48-hour auto-escalation check every hour

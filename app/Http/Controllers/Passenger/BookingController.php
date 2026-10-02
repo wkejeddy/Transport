@@ -40,8 +40,8 @@ class BookingController extends Controller
             $booking = $this->bookingService->createBooking(Auth::user(), $trip, $validated);
 
             $msg = ($booking->isAdvanceReservation())
-                ? 'Réservation pré-enregistrée ! Veuillez régler les frais de réservation de 500 FCFA sous 2 minutes pour garantir vos places.'
-                : 'Réservation enregistrée ! Veuillez procéder au paiement sous 2 minutes pour obtenir votre E-Billet.';
+                ? 'Réservation pré-enregistrée ! Veuillez régler les frais de réservation de 500 FCFA sous 30 minutes pour garantir vos places.'
+                : 'Réservation enregistrée ! Veuillez procéder au paiement sous 30 minutes pour obtenir votre E-Billet.';
 
             return redirect()->route('passenger.bookings.checkout', $booking)
                 ->with('success', $msg);
@@ -52,8 +52,9 @@ class BookingController extends Controller
 
     public function checkout(Booking $booking)
     {
-        if ($booking->passenger_id !== Auth::id()) {
-            abort(403);
+        if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : cette réservation appartient à un autre compte voyageur.'));
         }
 
         if ($booking->status === 'confirmed') {
@@ -63,7 +64,7 @@ class BookingController extends Controller
         if ($booking->isExpired()) {
             $msg = $booking->isReserved()
                 ? 'Cette réservation a expiré car le solde du billet n\'a pas été réglé au moins 6 heures avant le départ. Vos places ont été libérées.'
-                : 'Cette réservation a expiré après dépassement du délai de 2 minutes. Les places ont été libérées.';
+                : 'Cette réservation a expiré après dépassement du délai de 30 minutes. Les places ont été libérées.';
 
             return redirect()->route('passenger.bookings.history')
                 ->with('error', $msg);
@@ -77,7 +78,8 @@ class BookingController extends Controller
     public function ticket(Booking $booking)
     {
         if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
-            abort(403);
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : ce billet appartient à un autre compte voyageur.'));
         }
 
         $booking->load(['trip.branch', 'trip.vehicle', 'trip.departureTerminal', 'trip.arrivalTerminal', 'tripClass', 'passenger', 'payment']);
@@ -88,7 +90,8 @@ class BookingController extends Controller
     public function pdf(Booking $booking)
     {
         if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
-            abort(403);
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : ce billet appartient à un autre compte voyageur.'));
         }
 
         $booking->load(['trip.branch', 'trip.vehicle', 'trip.departureTerminal', 'trip.arrivalTerminal', 'tripClass', 'passenger', 'payment']);
@@ -99,7 +102,8 @@ class BookingController extends Controller
     public function thermal(Booking $booking)
     {
         if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
-            abort(403);
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : ce reçu appartient à un autre compte voyageur.'));
         }
 
         $booking->load(['trip.branch', 'trip.vehicle', 'trip.departureTerminal', 'trip.arrivalTerminal', 'tripClass', 'passenger', 'payment']);
@@ -129,8 +133,9 @@ class BookingController extends Controller
      */
     public function reschedule(Request $request, Booking $booking)
     {
-        if ($booking->passenger_id !== Auth::id()) {
-            abort(403);
+        if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : cette réservation appartient à un autre voyageur.'));
         }
 
         $validated = $request->validate([
@@ -168,8 +173,9 @@ class BookingController extends Controller
      */
     public function cancel(Booking $booking)
     {
-        if ($booking->passenger_id !== Auth::id()) {
-            abort(403);
+        if ($booking->passenger_id !== Auth::id() && !Auth::user()->isAdmin() && !Auth::user()->isManager()) {
+            return redirect()->route('passenger.bookings.history')
+                ->with('error', __('Accès non autorisé : cette réservation appartient à un autre voyageur.'));
         }
 
         if ($booking->status === 'cancelled') {

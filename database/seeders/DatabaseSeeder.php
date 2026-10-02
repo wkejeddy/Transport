@@ -13,8 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             TransportPlatformSeeder::class,
-            NewBusesAndPassengersSeeder::class,
-            TenPassengersAndTenTripsSeeder::class,
         ]);
     }
 }
