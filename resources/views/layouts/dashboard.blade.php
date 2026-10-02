@@ -144,6 +144,10 @@
                     <i class="fa-solid fa-house" style="width: 18px; text-align: center;"></i>
                     <span>{{ __('Site Public') }}</span>
                 </a>
+                <div style="padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; background: var(--bankio-pill-bg, rgba(0,0,0,0.03)); border-radius: 10px; margin: 4px 0;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--bankio-text-muted);">{{ __('Langue / Lang') }}</span>
+                    @include('components.bilingual-switcher')
+                </div>
                 <form action="{{ route('logout') }}" method="POST" style="margin-top: 4px;">
                     @csrf
                     <button type="submit" class="bankio-menu-link" style="width: 100%; border: none; background: transparent; cursor: pointer; color: var(--danger); font-family: inherit; font-size: inherit; text-align: left;">
@@ -158,10 +162,11 @@
     <!-- Main Dashboard Workspace -->
     <div class="dashboard-content">
         <!-- Mobile Sidebar Open Toggle Button -->
-        <div class="sidebar-mobile-toggle no-print">
+        <div class="sidebar-mobile-toggle no-print" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
             <button type="button" id="sidebarToggleBtn" class="btn btn-sm btn-outline">
                 <i class="fa-solid fa-bars-staggered"></i> {{ __('Menu Dashboard') }}
             </button>
+            @include('components.bilingual-switcher')
         </div>
 
         @yield('dashboard_content')

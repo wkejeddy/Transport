@@ -49,6 +49,35 @@
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     
+    <!-- Seamless Automated Bilingual Translation Engine Styles (Zero Google Banner/FOUC) -->
+    <style>
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-banner-frame,
+        iframe.goog-te-banner-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-tooltip,
+        .goog-tooltip:hover {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        body {
+            top: 0px !important;
+            position: static !important;
+        }
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        #google_translate_element {
+            display: none !important;
+        }
+        font {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+    </style>
+
     @yield('styles')
 </head>
 <body>
@@ -86,6 +115,9 @@
 
             <!-- Right Actions: Rounded Pill CTA (Book a Tour equivalent), Language & Theme -->
             <div style="display: flex; align-items: center; gap: 10px;">
+                <!-- Modern Bilingual Switcher [FR | EN] -->
+                @include('components.bilingual-switcher')
+
                 @auth
                     <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : (Auth::user()->isManager() ? route('manager.dashboard') : route('passenger.dashboard')) }}" class="haven-btn-pill-light desktop-only" style="font-weight: 700;">
                         <i class="fa-solid fa-user-circle"></i> {{ __('Mon Espace') }}
@@ -193,8 +225,8 @@
             <div style="margin-bottom: 20px;">
                 <div class="menu-section-label">{{ __('Préférences & Affichage') }}</div>
                 <div class="menu-tools-grid">
-                    <!-- Language Selector -->
-                    <a href="{{ route('lang.swap', app()->getLocale() === 'fr' ? 'en' : 'fr') }}" class="menu-tool-card" title="{{ app()->getLocale() === 'fr' ? __('Switch to English') : __('Passer en Français') }}" aria-label="{{ __('Langue d\'affichage') }}">
+                    <!-- Language Selector in Drawer -->
+                    <div class="menu-tool-card" style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <i class="fa-solid fa-globe" style="color: var(--primary); font-size: 1.1rem;"></i>
                             <div>
@@ -202,10 +234,8 @@
                                 <div style="font-size: 0.72rem; color: var(--text-muted);">{{ app()->getLocale() === 'fr' ? 'Français' : 'English' }}</div>
                             </div>
                         </div>
-                        <span class="badge badge-road" style="font-size: 0.75rem; font-weight: 800;">
-                            {{ app()->getLocale() === 'fr' ? 'FR &rarr; EN' : 'EN &rarr; FR' }}
-                        </span>
-                    </a>
+                        @include('components.bilingual-switcher')
+                    </div>
 
                     <!-- Theme Switcher -->
                     <button type="button" class="menu-tool-card" onclick="toggleTheme()" aria-label="{{ __('Mode Sombre / Clair') }}" style="width: 100%; border: 1px solid var(--border-color); cursor: pointer; text-align: left; background: var(--bg-surface);">
@@ -559,6 +589,57 @@
             });
         });
     </script>
+
+    <!-- Hidden Google Translate Element Anchor -->
+    <div id="google_translate_element" style="display:none;" aria-hidden="true"></div>
+
+    <script>
+        // Google Translate Element Initialization Callback
+        function googleTranslateElementInit() {
+            if (window.google && window.google.translate) {
+                new window.google.translate.TranslateElement({
+                    pageLanguage: 'fr',
+                    includedLanguages: 'fr,en',
+                    autoDisplay: false,
+                    layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+            }
+        }
+
+        // Global switchAppLanguage function accessible everywhere
+        window.switchAppLanguage = function(targetLang) {
+            if (!['fr', 'en'].includes(targetLang)) return;
+
+            // 1. Immediately update UI state in all switcher buttons
+            document.querySelectorAll('.bilingual-switch-container').forEach(function(el) {
+                el.setAttribute('data-current-locale', targetLang);
+                el.querySelectorAll('.bilingual-pill-btn').forEach(function(btn) {
+                    const isTarget = btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + targetLang + "'");
+                    btn.classList.toggle('active', isTarget);
+                    btn.setAttribute('aria-pressed', isTarget ? 'true' : 'false');
+                });
+            });
+
+            // 2. Set Cookies for Google Translate & App Locale
+            const expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
+            const googVal = targetLang === 'en' ? '/fr/en' : '/fr/fr';
+
+            // Root path cookies
+            document.cookie = 'googtrans=' + googVal + '; path=/; expires=' + expires;
+            document.cookie = 'realvoyage_locale=' + targetLang + '; path=/; expires=' + expires;
+            document.cookie = 'transportcm_locale=' + targetLang + '; path=/; expires=' + expires;
+
+            // Domain cookies if applicable
+            const host = window.location.hostname;
+            if (host && host !== 'localhost' && !host.match(/^[0-9.]+$/)) {
+                document.cookie = 'googtrans=' + googVal + '; path=/; domain=.' + host + '; expires=' + expires;
+            }
+
+            // 3. Immediately switch language via server endpoint to re-render all views in full translation
+            window.location.href = '/lang/' + targetLang;
+        };
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 
     @yield('scripts')
 </body>

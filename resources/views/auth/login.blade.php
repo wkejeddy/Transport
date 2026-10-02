@@ -45,8 +45,10 @@
             </div>
 
             <!-- Top Header with Minimalist Menu Icon & Quick Dropdown -->
-            <div class="login-wakatobi-header">
-                <div></div>
+            <div class="login-wakatobi-header" style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    @include('components.bilingual-switcher')
+                </div>
                 <div class="login-wakatobi-menu-container">
                     <button type="button" class="login-wakatobi-menu-btn" id="loginMenuBtn" aria-label="Menu" onclick="toggleLoginMenu(event)">
                         <span class="menu-dash"></span>

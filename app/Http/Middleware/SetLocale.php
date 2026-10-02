@@ -26,6 +26,14 @@ class SetLocale
         // 1. Check long-lived cookie if session is not yet populated
         if (!$locale) {
             $cookieLocale = $request->cookie('realvoyage_locale') ?: $request->cookie('transportcm_locale');
+            if (!$cookieLocale && $request->cookie('googtrans')) {
+                $rawGoog = (string) $request->cookie('googtrans');
+                $parts = explode('/', trim($rawGoog, '/'));
+                $target = end($parts);
+                if (in_array($target, $this->supportedLocales, true)) {
+                    $cookieLocale = $target;
+                }
+            }
             if ($cookieLocale && in_array($cookieLocale, $this->supportedLocales, true)) {
                 $locale = $cookieLocale;
             }

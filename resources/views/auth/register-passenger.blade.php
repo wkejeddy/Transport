@@ -16,10 +16,7 @@
                         <span>{{ config('app.name', 'Real Express Voyages') }}</span>
                     </a>
 
-                    <a href="{{ route('lang.swap', app()->getLocale() === 'fr' ? 'en' : 'fr') }}" class="login-scenic-lang" title="{{ app()->getLocale() === 'fr' ? __('Passer en Anglais') : __('Switch to French') }}">
-                        <i class="fa-solid fa-globe"></i>
-                        <span>{{ app()->getLocale() === 'fr' ? 'EN' : 'FR' }}</span>
-                    </a>
+                    @include('components.bilingual-switcher')
                 </div>
 
                 <div></div>
